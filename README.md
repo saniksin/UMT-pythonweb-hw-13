@@ -124,10 +124,30 @@ Swagger — <http://127.0.0.1:8000/docs>.
 ```bash
 uv sync                                   # встановити залежності (+ dev-група)
 docker run -d -p 6379:6379 redis:7-alpine # Redis
-docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=567234 postgres:16
+docker run -d --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=567234 postgres:16
+```
+
+**Якщо БД `contacts_app` ще не існує — спершу створіть її** (Alembic не створює БД,
+а лише накатує схему на наявну):
+
+```bash
+# варіант 1 — через psql у контейнері postgres
+docker exec -it some-postgres psql -U postgres -c "CREATE DATABASE contacts_app;"
+
+# варіант 2 — однією командою через createdb
+docker exec -it some-postgres createdb -U postgres contacts_app
+```
+
+**Якщо БД вже існує — одразу застосовуйте міграції і запускайте сервер:**
+
+```bash
 uv run alembic upgrade head
 uv run uvicorn main:app --reload
 ```
+
+> У `docker compose up` цей крок не потрібен: Postgres сам створює БД зі змінної
+> `POSTGRES_DB`, після чого контейнер застосунку автоматично виконує
+> `alembic upgrade head`.
 
 ---
 
