@@ -34,6 +34,8 @@ class ContactUpdate(ContactBase):
 
 
 class ContactResponse(ContactBase):
+    """Contact representation returned to clients (includes id and timestamps)."""
+
     id: int
     created_at: datetime
     updated_at: datetime

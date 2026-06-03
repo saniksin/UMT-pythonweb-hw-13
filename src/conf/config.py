@@ -73,6 +73,11 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> list[str]:
+        """Parse :attr:`CORS_ORIGINS` into a list of allowed origins.
+
+        :return: ``["*"]`` for a wildcard, otherwise the comma-separated origins.
+        :rtype: list[str]
+        """
         raw = self.CORS_ORIGINS.strip()
         if raw == "*":
             return ["*"]

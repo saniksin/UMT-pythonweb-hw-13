@@ -9,6 +9,14 @@ router = APIRouter(tags=["utils"])
 
 @router.get("/healthchecker")
 async def healthchecker(db: AsyncSession = Depends(get_db)):
+    """Check database connectivity by running a trivial ``SELECT 1``.
+
+    :param db: The database session (injected dependency).
+    :type db: AsyncSession
+    :raises HTTPException: 500 if the database is misconfigured or unreachable.
+    :return: A welcome message when the database responds.
+    :rtype: dict
+    """
     try:
         result = await db.execute(text("SELECT 1"))
         result = result.scalar_one_or_none()

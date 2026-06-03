@@ -39,6 +39,7 @@ async def read_contacts(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    """List the current user's contacts with pagination and optional search."""
     service = ContactService(db)
     return await service.get_contacts(
         user=user,
@@ -56,6 +57,7 @@ async def read_contact(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    """Return a single contact by id, or 404 if it does not belong to the user."""
     service = ContactService(db)
     contact = await service.get_contact(contact_id, user)
     if contact is None:
@@ -75,6 +77,7 @@ async def create_contact(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    """Create a contact for the current user (409 on duplicate email/phone)."""
     service = ContactService(db)
     try:
         return await service.create_contact(body, user)
@@ -92,6 +95,7 @@ async def update_contact(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    """Update one of the current user's contacts (404 if missing, 409 on clash)."""
     service = ContactService(db)
     try:
         contact = await service.update_contact(contact_id, body, user)
@@ -113,6 +117,7 @@ async def remove_contact(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
+    """Delete one of the current user's contacts (404 if it does not exist)."""
     service = ContactService(db)
     contact = await service.remove_contact(contact_id, user)
     if contact is None:

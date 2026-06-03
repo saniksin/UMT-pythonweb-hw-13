@@ -35,7 +35,7 @@ Docker Compose · uv**.
 | **Sphinx-документація** | `docs/` — `automodule` для `main` і всіх модулів `src`. Збірка: `cd docs && make html`. До функцій/методів додано docstrings у reST-стилі. |
 | **Модульні тести** | `tests/test_users_repository_unit.py`, `tests/test_contacts_repository_unit.py` — `AsyncMock(spec=AsyncSession)`, перевірка кожного методу репозиторіїв. |
 | **Інтеграційні тести** | `tests/test_integration_*.py` — `TestClient` + тестова БД SQLite, маршрути auth / users / contacts / utils. |
-| **Покриття > 75 %** | `pytest-cov`, фактичне покриття `src` — **89 %**. |
+| **Покриття > 75 %** | `pytest-cov`, фактичне покриття `src` — **96 %**. |
 | **Кеш Redis** | `get_current_user` спершу читає користувача з Redis і лише на промах звертається до БД (`src/services/cache.py`). |
 | **Скидання пароля** | `POST /auth/reset_password` + `POST /auth/reset_password/confirm` — безпечний токен на 1 годину, лист через FastAPI-Mail. |
 | **Ролі** | Колонка `users.role` (`user` / `admin`). Зміна аватара (`PATCH /users/avatar`) доступна **лише адміністраторам** — інші отримують `403`. |
@@ -201,8 +201,8 @@ uv run pytest --cov=src --cov-report=term-missing
 uv run pytest --cov=src --cov-report=html  # звіт у htmlcov/index.html
 ```
 
-- **51 тест**, усі проходять.
-- Покриття `src` — **89 %** (вимога — понад 75 %).
+- **71 тест**, усі проходять.
+- Покриття `src` — **96 %** (вимога — понад 75 %); кожен модуль покрито щонайменше на 85 %.
 - Модульні тести репозиторіїв ізольовані через `AsyncMock`.
 - Інтеграційні тести використовують окрему SQLite-БД (`app.dependency_overrides`),
   пошту мокають через `monkeypatch`, а Cloudinary — через `@patch`.
@@ -213,7 +213,7 @@ uv run pytest --cov=src --cov-report=html  # звіт у htmlcov/index.html
 
 ```bash
 cd docs
-make html         # Linux/macOS
+uv run make html         # Linux/macOS
 # .\make.bat html # Windows
 ```
 
@@ -272,7 +272,7 @@ make html         # Linux/macOS
 | 1 | Документація Sphinx | 2.5 | `docs/` + docstrings у всіх модулях |
 | 2 | Модульні тести репозиторію | 2 | `tests/test_*_repository_unit.py` |
 | 3 | Інтеграційні тести маршрутів | 3 | `tests/test_integration_*.py` |
-| 4 | Покриття > 75 % | 1.5 | `pytest-cov` → **89 %** |
+| 4 | Покриття > 75 % | 1.5 | `pytest-cov` → **96 %** |
 | 5 | Кешування користувача в Redis | 2.5 | `src/services/cache.py`, `get_current_user` |
 | 6 | Скидання пароля | 2 | `/auth/reset_password[/confirm]`, лист + токен |
 | 7 | Ролі `user` / `admin` | 1.5 | `UserRole`, `get_current_admin_user`, avatar admin-only |
