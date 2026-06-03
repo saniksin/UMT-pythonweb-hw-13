@@ -17,6 +17,7 @@ Docker Compose · uv**.
 - [Конфігурація (.env)](#конфігурація-env)
 - [Запуск у Docker Compose](#запуск-у-docker-compose)
 - [Запуск локально](#запуск-локально)
+- [Поширені помилки при запуску (troubleshooting)](#поширені-помилки-при-запуску-troubleshooting)
 - [Кешування в Redis](#кешування-в-redis)
 - [Скидання пароля](#скидання-пароля)
 - [Ролі користувачів](#ролі-користувачів)
@@ -148,6 +149,28 @@ uv run uvicorn main:app --reload
 > У `docker compose up` цей крок не потрібен: Postgres сам створює БД зі змінної
 > `POSTGRES_DB`, після чого контейнер застосунку автоматично виконує
 > `alembic upgrade head`.
+
+---
+
+## Поширені помилки при запуску (troubleshooting)
+
+**Швидка діагностика стану міграцій:**
+
+```bash
+uv run alembic current   # порожньо → міграції до цієї БД ще не накатані
+```
+
+| Помилка | Причина | Розв'язання |
+|---------|---------|-------------|
+| `pydantic ... ValidationError: Field required` (`JWT_SECRET`, `MAIL_*`, `CLD_*`) | немає файлу `.env` або сервер запущено не з кореня проєкту | створіть `.env` і запускайте з кореня (де лежить `.env`):<br>`cp .env.example .env` |
+| `asyncpg ... InvalidCatalogNameError: database "contacts_app" does not exist` | Postgres працює, але **бази немає** | створіть БД:<br>`docker exec -it some-postgres createdb -U postgres contacts_app` |
+| `asyncpg ... UndefinedTableError: relation "users" does not exist` | база є, але **таблиць немає** (свіжий/перестворений Postgres) | накатіть міграції:<br>`uv run alembic upgrade head` |
+| `/bin/sh: sphinx-build: not found` (під час `make html`) | `sphinx-build` стоїть лише у venv проєкту | збирайте в оточенні `uv`:<br>`uv run make html` |
+
+> Якщо Postgres піднято через `docker run` без іменованого volume, після
+> перестворення контейнера дані зникають — повторіть створення БД і
+> `uv run alembic upgrade head`. У `docker compose up` цього не трапляється
+> (дані на volume `postgres_data`, міграції виконуються автоматично).
 
 ---
 
