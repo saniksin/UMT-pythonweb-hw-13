@@ -37,4 +37,8 @@ dev = [
 pythonpath = ["."]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-filterwarnings = "ignore::DeprecationWarning"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    # Стороннє попередження Starlette про httpx у TestClient (UserWarning).
+    "ignore::starlette.exceptions.StarletteDeprecationWarning",
+]
