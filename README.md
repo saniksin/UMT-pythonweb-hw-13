@@ -2,10 +2,7 @@
 
 Фінальне домашнє завдання курсу. Це розвиток
 [Homework 11](https://github.com/saniksin/UMT-pythonweb-hw-11): до готового REST API
-додано **документацію Sphinx**, **модульні та інтеграційні тести (pytest, покриття
-> 75 %, **кешування користувача в Redis**, **скидання пароля поштою**, **ролі
-користувачів (`user` / `admin`)** та (додатково) **пару JWT-токенів
-`access` + `refresh`**.
+додано **документацію Sphinx**, **модульні та інтеграційні тести (pytest, покриття (75 %)**, **кешування користувача в Redis**, **скидання пароля поштою**, **ролі користувачів (`user` / `admin`)** та (додатково) **пару JWT-токенів `access` + `refresh`**.
 
 Стек: **FastAPI · SQLAlchemy 2.0 (async) · PostgreSQL · Redis · Alembic ·
 Pydantic v2 · FastAPI-Mail · slowapi · Cloudinary · pytest · Sphinx ·
